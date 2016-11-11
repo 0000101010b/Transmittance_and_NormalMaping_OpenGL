@@ -1,3 +1,20 @@
 ﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (Assignment1.vcxproj, Project2.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  Project2.vcxproj -> C:\Users\BenTh\Desktop\Project2\Debug\Assignment2.exe
-  Project2.vcxproj -> C:\Users\BenTh\Desktop\Project2\Debug\Assignment2.pdb (Full PDB)
+cl : Command line warning D9035: option 'V' has been deprecated and will be removed in a future release
+  Source.cpp
+c:\users\benth\documents\github\transmittance_and_normalmaping_opengl\project2\project2\teapot.h(2996): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
+c:\users\benth\documents\github\transmittance_and_normalmaping_opengl\project2\project2\teapot.h(2996): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\benth\documents\github\transmittance_and_normalmaping_opengl\project2\project2\teapot.h(5975): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
+c:\users\benth\documents\github\transmittance_and_normalmaping_opengl\project2\project2\teapot.h(5975): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\benth\documents\github\transmittance_and_normalmaping_opengl\project2\project2\teapot.h(8954): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
+c:\users\benth\documents\github\transmittance_and_normalmaping_opengl\project2\project2\teapot.h(8954): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\benth\documents\github\transmittance_and_normalmaping_opengl\project2\project2\source.cpp(236): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\benth\documents\github\transmittance_and_normalmaping_opengl\project2\project2\source.cpp(591): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\benth\documents\github\transmittance_and_normalmaping_opengl\project2\project2\source.cpp(592): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\benth\documents\github\transmittance_and_normalmaping_opengl\project2\project2\source.cpp(596): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\benth\documents\github\transmittance_and_normalmaping_opengl\project2\project2\source.cpp(597): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\benth\documents\github\transmittance_and_normalmaping_opengl\project2\project2\source.cpp(599): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\benth\documents\github\transmittance_and_normalmaping_opengl\project2\project2\source.cpp(600): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\benth\documents\github\transmittance_and_normalmaping_opengl\project2\project2\source.cpp(607): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+  LoadShaders.cpp
+c1xx : fatal error C1083: Cannot open source file: '..\..\openglStuff\libs\LoadShaders.cpp': No such file or directory
+  Generating Code...
