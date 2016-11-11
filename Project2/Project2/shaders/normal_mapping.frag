@@ -9,10 +9,13 @@ in VS_OUT {
     vec3 TangentFragPos;
 } fs_in;
 
+
 uniform sampler2D diffuseMap;
 uniform sampler2D normalMap;
 
 uniform bool normalMapping;
+
+//from learnopengl used for brick wall
 
 void main()
 {           

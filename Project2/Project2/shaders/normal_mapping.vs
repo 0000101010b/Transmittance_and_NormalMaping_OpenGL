@@ -20,6 +20,8 @@ uniform mat4 model;
 uniform vec3 lightPos;
 uniform vec3 viewPos;
 
+//brick wall shader learn opengl
+
 void main()
 {
     gl_Position = projection * view * model * vec4(position, 1.0f);

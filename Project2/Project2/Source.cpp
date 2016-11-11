@@ -1,29 +1,15 @@
 /*
-* Program name: Assignment 1 (Real Time Rendering)
+* Program name: Assignment 2 (Real Time Rendering) Transmittance and normal mapping
 * Written by: Ben Thompson
-* Date:12/10/2016
+* Date:9/11/2016
 * 
 
-SINCE GLFW DOESN'T SUPPORT WRITING TEXT TO SCREEN EXTRA LIBRARIES WERE REQUIRED
-WHICH AT THIS POINT ARE NOT FULLY IMPLEMENTED... THE USER INPUT CONTROLS ARE AS 
-FOLLOWS
-
 CONTROLS:
-
-USING NUMBER TO SWITCH BETWEEN SHADERS
-1: VERTEX MANIPULATION WITH AMBIENT,DIFFUSE AND SPECULAR LIGHTING
-2: TOON SHADER
-3: BLINN-PHONG
-
-ROTATING OBJECT:
-P: (DO SUPERMAN THING) SPEEDS UP RIGHT ON REALEASE
-O: (DO SUPERMAN THING) SPEEDS UP LEFT ON REALEASE
 
 FIRST PERSON CAMERA MOVEMENT FROM HTTP://LEARNOPENGL.COM (SEE CAMERA INTERNAL HEADER FILE) 
 W A D S AND MOUSE MOVEMENT
 
-shader class: HTTP://LEARNOPENGL.COM 
-
+shader,Model and mesh adapted from HTTP://LEARNOPENGL.COM 
 */
 #include <vector>
 #include <iostream>
@@ -48,24 +34,6 @@ shader class: HTTP://LEARNOPENGL.COM
 #include <glm/gtc/type_ptr.hpp>
 
 
-
-/*
-* To implement Text printing (half implemented)
-* */
-
-// FreeType Headers
-#include <ft2build.h>
-#include <freetype/freetype.h>
-#include <freetype/ftglyph.h>
-#include <freetype/ftoutln.h>
-#include <freetype/fttrigon.h>
-
-// for text 
-#include <GL/freeglut.h>
-
-//ftgl
-#include <FTGL/ftgl.h>
-
 // Internal header files
 #include "Shader.h"
 #include "Camera.h"
@@ -83,7 +51,7 @@ GLuint loadTexture(GLchar* path);
 GLuint loadCubemap(std::vector<const GLchar*> faces);
 
 // Window dimensions
-const GLuint WIDTH = 800, HEIGHT = 600;
+const GLuint WIDTH = 800, HEIGHT =600;
 
 // Camera
 Camera  camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -95,7 +63,7 @@ bool    keys[1024];
 glm::vec3 lightPos(1.0f, 20.0f, 30.0f);
 
 
-//wall variables
+//wall variables (from normal mapped wall)
 glm::vec3 wallPos(-10.0f, 1.0f, -2.0f);
 
 // Deltatime
@@ -119,7 +87,7 @@ int main()
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 	// Create a GLFWwindow object that we can use for GLFW's functions
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Assignment 2", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Transmittance and Normalmapping", nullptr, nullptr);
 	glfwMakeContextCurrent(window);
 
 	// Set the required callback functions
@@ -150,21 +118,16 @@ int main()
 	Shader reflection("shaders/reflection.vs", "shaders/reflection.frag");
 	Shader refraction("shaders/refraction.vs", "shaders/refraction.frag");
 	Shader skyboxShader("shaders/skybox.vs", "shaders/skybox.frag");
-
-	//learnopengl.com shader
-	Shader lampShader("shaders/lamp.vs", "shaders/lamp.frag");
-	
 	Shader ModelTexture("shaders/ModelTexture.vs", "shaders/ModelTexture.frag");
-	//normal map
+	
+	//wall noraml map
 	//Shader normalMapShader("shaders/normal_mapping.vs", "shaders/normal_mapping.frag");
 #pragma endregion
-
 	#pragma region Load Models
 	// Load models
-	Model ourModel("models/Nanosuit2/nanosuit2.3ds");
 	Model diamond("models/diamond/diamondGem.obj");
-
 	Model nanosuit("models/nanosuit/nanosuit.obj");
+	Model nanosuit2("models/Nanosuit2/nanosuit2.3ds");
 #pragma endregion
 
 	#pragma region Setup Skybox
@@ -233,7 +196,6 @@ int main()
 	/// Cubemap (Skybox)
 	///
 	std::vector<const GLchar*> faces;
-	
 	faces.push_back("skybox/posx.jpg");
 	faces.push_back("skybox/negx.jpg");
 	faces.push_back("skybox/posy.jpg");
@@ -250,15 +212,13 @@ int main()
 	*/
 	GLuint cubemapTexture = loadCubemap(faces);
 #pragma endregion
-
 	#pragma region Setup Brick Normalmap
 	
 	///
 	/// Load textures
-	///
-	GLuint diffuseMap = loadTexture("textures/brickwall.jpg");
-	GLuint normalMap = loadTexture("textures/brickwall_normal.jpg");
-
+	/// Wall textures
+	//GLuint diffuseMap = loadTexture("textures/brickwall.jpg");
+	//GLuint normalMap = loadTexture("textures/brickwall_normal.jpg");
 	///
 	/// Set texture units for normal map
 	///
@@ -350,8 +310,10 @@ int main()
 		modelChromaticDisper = glm::rotate(modelChromaticDisper, (GLfloat)glfwGetTime() * glm::radians(rotateSpeed), glm::vec3(0.0, 1.0, 0.0));
 		glUniformMatrix4fv(glGetUniformLocation(fresnel.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelChromaticDisper));
 		nanosuit.Draw(fresnel);
+
+
 #pragma endregion
-		#pragma region Draw Model (Reflection)
+		#pragma region Draw Diamond and Nansuit (Reflection)
 		reflection.Use();
 		projection = glm::perspective(camera.Zoom, (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
 		view = camera.GetViewMatrix();
@@ -372,15 +334,25 @@ int main()
 		glUniformMatrix4fv(glGetUniformLocation(reflection.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelReflection));
 
 		nanosuit.Draw(reflection);
+
+		glm::mat4 diamondReflection;
+		diamondReflection = glm::scale(diamondReflection, glm::vec3(0.2f, 0.2f, 0.2f));
+		diamondReflection = glm::scale(diamondReflection, glm::vec3(0.5f));
+		diamondReflection = glm::translate(diamondReflection, glm::vec3(32.0f, -4.0f, 0.0f));
+		diamondReflection = glm::rotate(diamondReflection, (GLfloat)glfwGetTime() * glm::radians(rotateSpeed), glm::vec3(0.0, 1.0, 0.0));
+		diamondReflection = glm::scale(diamondReflection, glm::vec3(0.1f));
+		// It's a bit too big for our scene, so scale it down
+		glUniformMatrix4fv(glGetUniformLocation(reflection.Program, "model"), 1, GL_FALSE, glm::value_ptr(diamondReflection));
+		diamond.Draw(reflection);
 #pragma endregion
 
-#pragma region Draw Model (Refraction)
+		#pragma region Draw Model (Refraction)
 		refraction.Use();
 		projection = glm::perspective(camera.Zoom, (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
 		view = camera.GetViewMatrix();
 		glUniformMatrix4fv(glGetUniformLocation(refraction.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(glGetUniformLocation(refraction.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
-
+		glUniform1f(glGetUniformLocation(refraction.Program, "ratio"), 1.0f/1.33f);//water
 
 
 		// Draw the loaded model
@@ -396,6 +368,7 @@ int main()
 
 		nanosuit.Draw(refraction);
 #pragma endregion
+
 		#pragma region Draw Model Fresnel Effect
 		GLint modelLoc;
 		fresnel.Use();
@@ -418,8 +391,11 @@ int main()
 		model6 = glm::rotate(model6, (GLfloat)glfwGetTime() * glm::radians(rotateSpeed), glm::vec3(0.0, 1.0, 0.0));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model6));
 		nanosuit.Draw(fresnel);
+	
+		
 
 #pragma endregion
+
 		#pragma region Draw Model with normals
 		modelNormalMapShader.Use();
 		view = camera.GetViewMatrix();
@@ -443,11 +419,9 @@ int main()
 		nanosuit.Draw(modelNormalMapShader);
 #pragma endregion
 
+#pragma region Textured Nanosuit
 		ModelTexture.Use();
 
-		/*
-		* Getting uniform matrix's in shader
-		*/
 		//local view Position
 		GLint viewPosLoc = glGetUniformLocation(ModelTexture.Program, "viewPos");
 		glUniform3f(viewPosLoc, camera.Position.x, camera.Position.y, camera.Position.z);
@@ -455,8 +429,8 @@ int main()
 		// Create camera transformations
 		view = camera.GetViewMatrix();
 		projection = glm::perspective(camera.Zoom, (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 100.0f);
+		
 		// Get the uniform matrixes
-
 		modelLoc = glGetUniformLocation(ModelTexture.Program, "model");
 		GLint viewLoc = glGetUniformLocation(ModelTexture.Program, "view");
 		GLint projLoc = glGetUniformLocation(ModelTexture.Program, "projection");
@@ -471,11 +445,12 @@ int main()
 		//temp = glm::rotate(temp, (GLfloat)glm::radians(-90.0f), glm::vec3(1, 0, 0));
 		//temp = glm::scale(temp, glm::vec3(1, 3, 1));
 		temp = glm::translate(temp, glm::vec3(-16.0f, -4.0f, 0.0f));
-	//	model9 = glm::rotate(, (GLfloat)glfwGetTime() * glm::radians(rotateSpeed), glm::vec3(0.0, 0.0, 1.0));
+		//	model9 = glm::rotate(, (GLfloat)glfwGetTime() * glm::radians(rotateSpeed), glm::vec3(0.0, 0.0, 1.0));
 		temp = glm::rotate(temp, (GLfloat)glfwGetTime() * glm::radians(rotateSpeed), glm::vec3(0.0, 1.0, 0.0));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(temp));
 
 		nanosuit.Draw(ModelTexture);
+#pragma endregion
 
 		// Swap the screen buffers
 		glfwSwapBuffers(window);
@@ -487,8 +462,7 @@ int main()
 }
 
 
-
-// RenderQuad() Renders a 1x1 quad in NDC
+// RenderQuad() https://www.learnopengl.com
 GLuint quadVAO = 0;
 GLuint quadVBO;
 void RenderQuad()

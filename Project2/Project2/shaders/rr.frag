@@ -19,11 +19,6 @@ uniform sampler2D texture_diffuse1;
 
 void main()
 {             
-
-    //float ratio = 1.00 / 1.52;
-  //  vec3 I = normalize(Position - cameraPos);
-//	vec3 R = refract(I, normalize(Normal), ratio);
-
 	vec4 diffuse_color = texture(texture_diffuse1, TexCoords);	
 	
 	vec3 refractColor;
@@ -36,10 +31,4 @@ void main()
 	FragColor = vec4(color, 1.0)+diffuse_color;
 	
 	
-	
-	
-  //  vec4 temp = texture(skybox, R);
-   // I = normalize(Position - cameraPos);
-    //R = reflect(I, normalize(Normal));
-    //FragColorcolor = texture(skybox, R)+temp;
 }

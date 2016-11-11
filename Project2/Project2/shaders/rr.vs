@@ -7,12 +7,10 @@ layout (location = 2) in vec2 texCoords;
 out vec3 Normal;
 out vec3 Position;
 out vec3 Reflect;
-out vec3 Refract;
 out vec3 RefractR,RefractG,RefractB;
 out vec2 TexCoords;
 
 out float Ratio;
-
 
 uniform mat4 model;
 uniform mat4 view;
@@ -33,11 +31,6 @@ float rand(vec2 n)
 }
 
 
-
-//const float Eta = 0.66; // Ratio of indices of refraction
-
-
-
 void main()
 {
 	float F=((1.0- EtaG)*(1.0- EtaG))/((1.0+EtaG)*(1.0+EtaG));
@@ -46,8 +39,7 @@ void main()
 	vec2 seed=FragPos.xy;
 	vec2 seed2=FragPos.zy;
 	vec2 seed3=FragPos.xz;
-	
-	
+		
 	float r=rand(seed);
 	float r2=rand(seed2);
 	float r3=rand(seed3);
@@ -59,8 +51,6 @@ void main()
 	}else{
 		randPos=vec3(0,0,0);
 	}
-
-	
 	vec4 ecPosition= view*vec4(position+randPos, 1.0f);
 	vec3 ecPosition3=ecPosition.xyz/ecPosition.w;
 

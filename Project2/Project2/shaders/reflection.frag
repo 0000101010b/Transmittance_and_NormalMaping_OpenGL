@@ -10,10 +10,10 @@ uniform samplerCube skybox;
 
 void main()
 {       
-	vec4 diffuse_color = texture(texture_diffuse1, TexCoords);
+	vec4 diffuseColor = texture(texture_diffuse1, TexCoords);
     vec3 I = normalize(Position - cameraPos);
     vec3 R = reflect(I, normalize(Normal));
-    vec4 reflect_color;
-    reflect_color = texture(skybox, R);
-	color = diffuse_color + reflect_color;
+    vec4 reflectColor;
+    reflectColor = texture(skybox, R);
+	color = diffuseColor + reflectColor;
 }
