@@ -8,4 +8,10 @@ Transmitance and Normal mapping in opengl
 5. Reflection
 6. Refraction
 
+
+[OpenGL Teapot Youtube video](https://www.youtube.com/watch?v=4I5dGt_f3vg&feature=youtu.be)
+
+<a href="https://www.youtube.com/watch?v=4I5dGt_f3vg&feature=youtu.be">
+<img alt="youtube" src="/Capture.JPG" width="350" />
+
 Link to video: https://www.youtube.com/watch?v=4I5dGt_f3vg&feature=youtu.be
